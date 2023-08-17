@@ -1,9 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const WishList = require("../model/wishlist.model");
-
+const verifyUser = require("../middleware/verify.user");
 //Post request
-router.route("/").post(async(req, res)=> {
+router.route("/").post(verifyUser, async(req, res)=> {
     const newWishList = new WishList(req.body);
     try {
         const savedWishList = await newWishList.save();
@@ -14,7 +14,7 @@ router.route("/").post(async(req, res)=> {
 })
 
 //Delete request
-router.route("/:id").delete(async(req, res)=> {
+router.route("/:id").delete(verifyUser, async(req, res)=> {
  try {
     await WishList.findByIdAndDelete(req.params.id);
     res.json({
